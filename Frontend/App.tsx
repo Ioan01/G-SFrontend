@@ -15,14 +15,13 @@ import React from 'react';
 const style = require('../Frontend/styles');
 
 import AccountView from './components/AccountView';
+import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
 
 const App = () => {
-  const Tab = createMaterialTopTabNavigator();
-
+  const Tab = createMaterialBottomTabNavigator();
   return (
     <NavigationContainer>
       <Tab.Navigator
-        tabBarPosition={'bottom'}
         screenOptions={({route}) => ({
           tabBarShowLabel: false,
           tabBarIndicatorStyle: {
