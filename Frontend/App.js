@@ -14,8 +14,10 @@ import React from 'react';
 
 const style = require('../Frontend/styles');
 
-import AccountView from './components/AccountView';
+import AccountView from './components/AccountView/AccountView';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
+import StoreView from './components/StoreView';
+import {AccountContext} from './Contexts/AccountContext';
 
 const App = () => {
   const Tab = createMaterialBottomTabNavigator();
@@ -33,7 +35,8 @@ const App = () => {
           tabBarIcon: ({focused, color}) =>
             style.TabBarIcon({route, focused, color}),
         })}>
-        <Tab.Screen name="Profile" component={AccountView} />
+        <Tab.Screen name={'Store'} component={StoreView} />
+        <Tab.Screen name={'Profile'} component={AccountView} />
       </Tab.Navigator>
     </NavigationContainer>
   );
