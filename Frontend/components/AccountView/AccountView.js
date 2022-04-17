@@ -42,6 +42,17 @@ const AccountView = () => {
   const [profileRole, setProfileRole] = useState('');
   const [money, setMoney] = useState(0);
 
+  useEffect(() => {
+    try {
+      AsyncStorage.multiGet(['username', 'password']).then(pair => {
+        if (pair[0][1] != null && pair[1][1] != null) {
+          setUsername(pair[0][1]);
+          setPassword(pair[1][1]);
+        }
+      });
+    } catch (e) {}
+  }, []);
+
   return (
     <AccountContext.Provider
       value={{

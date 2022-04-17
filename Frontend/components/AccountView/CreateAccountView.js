@@ -66,7 +66,7 @@ const CreateAccountView = ({navigation}) => {
     <Provider>
       <Portal>
         <Modal visible={registered} onDismiss={() => navigation.goBack()}>
-          <View style={{}}>
+          <View>
             <Card>
               <Card.Title title={'Account successfully registered'} />
               <Card.Content>

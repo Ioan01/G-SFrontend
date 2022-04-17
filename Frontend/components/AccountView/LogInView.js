@@ -1,6 +1,13 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {PixelRatio, Text, View} from 'react-native';
-import {Banner, Button, HelperText, TextInput, Title} from 'react-native-paper';
+import {
+  ActivityIndicator,
+  Banner,
+  Button,
+  HelperText,
+  TextInput,
+  Title,
+} from 'react-native-paper';
 import {HttpStatus, sendJsonRequest} from '../../HttpHandler';
 import {AccountContext} from '../../Contexts/AccountContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -11,11 +18,20 @@ const LogInView = ({route, navigation}) => {
 
   const [helperText, setHelperText] = useState('');
 
+  const [loading, setLoading] = useState(false);
+
   const {loggedIn, username, password, setPassword, setUsername, setLoggedIn} =
     useContext(AccountContext);
 
+  useEffect(() => {
+    if (username != '' && password != '') {
+      login();
+    }
+  });
+
   async function login() {
     try {
+      setLoading(true);
       const resp = await sendJsonRequest(
         'POST',
         'login',
@@ -30,7 +46,6 @@ const LogInView = ({route, navigation}) => {
           setLoggedIn(true);
           await AsyncStorage.setItem('username', username);
           await AsyncStorage.setItem('password', password);
-          return;
           break;
         case HttpStatus.INTERNAL_SERVER_ERROR:
           setHelperText('Internal server error');
@@ -43,7 +58,7 @@ const LogInView = ({route, navigation}) => {
       console.log(error);
       setHelperText(error.toString());
     }
-    setLoggedIn(false);
+    setLoading(false);
   }
 
   return (
@@ -57,6 +72,7 @@ const LogInView = ({route, navigation}) => {
         style={{marginBottom: 30 / PixelRatio.get()}}
         value={username}
         onChangeText={text => {
+          setHelperText('');
           setUsername(text);
         }}
         placeholder={'Enter username'}
@@ -69,6 +85,7 @@ const LogInView = ({route, navigation}) => {
         value={password}
         onChangeText={text => {
           setPassword(text);
+          setHelperText('');
         }}
         right={
           <TextInput.Icon
@@ -82,18 +99,22 @@ const LogInView = ({route, navigation}) => {
       <HelperText
         type={'error'}
         style={{marginBottom: 30 / PixelRatio.get()}}
-        visible={helperText === ''}>
+        visible={helperText !== ''}>
         {helperText}
       </HelperText>
       <Button
         mode={'outlined'}
         onPress={async () => {
+          setHelperText('');
           await login();
         }}>
         Log In
       </Button>
       <Banner
-        style={{marginTop: 100 / PixelRatio.get()}}
+        style={{
+          marginTop: 100 / PixelRatio.get(),
+          marginBottom: 100 / PixelRatio.get(),
+        }}
         visible={true}
         actions={[
           {
@@ -105,6 +126,7 @@ const LogInView = ({route, navigation}) => {
         ]}>
         <Text style={{fontSize: 30}}>Don't have an account?</Text>
       </Banner>
+      <ActivityIndicator animating={loading} size={'large'} />
     </View>
   );
 };
