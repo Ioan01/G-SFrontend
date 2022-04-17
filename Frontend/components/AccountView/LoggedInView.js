@@ -1,9 +1,10 @@
 import React, {useContext, useEffect, useState} from 'react';
-import {Avatar, Button} from 'react-native-paper';
+import {Avatar, Badge, Button, List, Surface, Title} from 'react-native-paper';
 import {PixelRatio, View} from 'react-native';
 import {AccountContext} from '../../Contexts/AccountContext';
 import {HttpStatus, sendJsonRequest} from '../../HttpHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
 const LoggedInView = ({navigation}) => {
   const {
@@ -16,6 +17,7 @@ const LoggedInView = ({navigation}) => {
     setPassword,
     setUsername,
     setLoggedIn,
+    setFoundAccount,
   } = useContext(AccountContext);
   const [loading, setLoading] = useState(false);
 
@@ -37,6 +39,7 @@ const LoggedInView = ({navigation}) => {
       setUsername('');
       setPassword('');
       setLoggedIn(false);
+      setFoundAccount(false);
     } catch (e) {}
   }
 
@@ -53,6 +56,8 @@ const LoggedInView = ({navigation}) => {
         case HttpStatus.OK:
           const json = await response.json();
           setProfileName(json.username);
+          setMoney(json.money);
+          setProfileRole(json.role);
           console.log(JSON.stringify(json));
           break;
         default:
@@ -81,10 +86,62 @@ const LoggedInView = ({navigation}) => {
         marginTop: 100 / PixelRatio.get(),
         alignItems: 'center',
       }}>
-      <Avatar.Text
-        label={profileName.slice(0, 2)}
-        size={250 / PixelRatio.get()}
-      />
+      <Surface
+        style={{
+          marginBottom: 100 / PixelRatio.get(),
+          elevation: 40,
+          borderRadius: 100,
+          borderWidth: 2,
+        }}>
+        <Avatar.Text
+          label={profileName.slice(0, 2)}
+          size={250 / PixelRatio.get()}
+        />
+      </Surface>
+      <Surface
+        style={{
+          elevation: 10,
+          alignSelf: 'stretch',
+          borderRadius: 10,
+        }}>
+        <List.Section title={'Profile Details'}>
+          <List.Item
+            title={profileName}
+            description={'This is your public profile name'}
+            left={props => <List.Icon icon={'tag'} />}
+          />
+          <List.Item
+            title={money.toString()}
+            description={'This is your current balance'}
+            left={props => <List.Icon icon={'bitcoin'} />}
+          />
+          <List.Item
+            title={profileRole}
+            description={'This is your role'}
+            left={props => (
+              <List.Icon
+                icon={profileRole === 'client' ? 'face-man' : 'toolbox'}
+              />
+            )}
+          />
+        </List.Section>
+        <List.Subheader>Change account details</List.Subheader>
+        <List.Item
+          onPress={() => {}}
+          title={'Change username'}
+          left={props => <List.Icon icon={'pen'} />}
+        />
+        <List.Item
+          onPress={() => {}}
+          title={'Change password'}
+          left={props => <List.Icon icon={'lock'} />}
+        />
+        <List.Item
+          onPress={() => {}}
+          title={'Delete account'}
+          left={props => <List.Icon icon={'delete'} />}
+        />
+      </Surface>
     </View>
   );
 };

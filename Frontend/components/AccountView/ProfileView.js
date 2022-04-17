@@ -32,11 +32,13 @@ import AsyncStorage from '@react-native-async-storage/async-storage';
 
 const style = require('../../styles');
 
-const AccountView = () => {
+const ProfileView = () => {
   const accountViewStack = createStackNavigator();
 
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+
+  const [foundAccount, setFoundAccount] = useState(false);
   const [loggedIn, setLoggedIn] = useState(false);
   const [profileName, setProfileName] = useState('');
   const [profileRole, setProfileRole] = useState('');
@@ -48,6 +50,8 @@ const AccountView = () => {
         if (pair[0][1] != null && pair[1][1] != null) {
           setUsername(pair[0][1]);
           setPassword(pair[1][1]);
+
+          setFoundAccount(true);
         }
       });
     } catch (e) {}
@@ -58,6 +62,9 @@ const AccountView = () => {
       value={{
         username: username,
         setUsername: setUsername,
+
+        foundAccount: foundAccount,
+        setFoundAccount: setFoundAccount,
 
         password: password,
         setPassword: setPassword,
@@ -106,4 +113,4 @@ const AccountView = () => {
   );
 };
 
-export default AccountView;
+export default ProfileView;

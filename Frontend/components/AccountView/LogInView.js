@@ -20,12 +20,21 @@ const LogInView = ({route, navigation}) => {
 
   const [loading, setLoading] = useState(false);
 
-  const {loggedIn, username, password, setPassword, setUsername, setLoggedIn} =
-    useContext(AccountContext);
+  const {
+    foundAccount,
+    loggedIn,
+    username,
+    password,
+    setPassword,
+    setUsername,
+    setLoggedIn,
+  } = useContext(AccountContext);
 
   useEffect(() => {
-    if (username != '' && password != '') {
-      login();
+    if (foundAccount) {
+      if (username !== '' && password !== '') {
+        login();
+      }
     }
   });
 

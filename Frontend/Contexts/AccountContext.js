@@ -7,6 +7,9 @@ export const AccountContext = createContext({
   password: '',
   setPassword: password => {},
 
+  foundAccount: false,
+  setFoundAccount: foundAccount => {},
+
   loggedIn: false,
   setLoggedIn: loggedIn => {},
 
