@@ -16,29 +16,32 @@ const style = require('../Frontend/styles');
 
 import ProfileView from './components/AccountView/ProfileView';
 import {createMaterialBottomTabNavigator} from '@react-navigation/material-bottom-tabs';
-import StoreView from './components/StoreView';
-import {AccountContext} from './Contexts/AccountContext';
+import StoreView from './components/StoreView/StoreView';
+import {Provider as PaperProvider} from 'react-native-paper';
+import Icon from 'react-native-vector-icons/FontAwesome5';
 
 const App = () => {
   const Tab = createMaterialBottomTabNavigator();
   return (
-    <NavigationContainer>
-      <Tab.Navigator
-        screenOptions={({route}) => ({
-          tabBarShowLabel: false,
-          tabBarIndicatorStyle: {
-            backgroundColor: style.TabHighlightColor,
-          },
-          tabBarStyle: {
-            backgroundColor: style.TabColor,
-          },
-          tabBarIcon: ({focused, color}) =>
-            style.TabBarIcon({route, focused, color}),
-        })}>
-        <Tab.Screen name={'Store'} component={StoreView} />
-        <Tab.Screen name={'Profile'} component={ProfileView} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <PaperProvider>
+      <NavigationContainer>
+        <Tab.Navigator
+          screenOptions={({route}) => ({
+            tabBarShowLabel: false,
+            tabBarIndicatorStyle: {
+              backgroundColor: style.TabHighlightColor,
+            },
+            tabBarStyle: {
+              backgroundColor: style.TabColor,
+            },
+            tabBarIcon: ({focused, color}) =>
+              style.TabBarIcon({route, focused, color}),
+          })}>
+          <Tab.Screen name={'Store'} component={StoreView} />
+          <Tab.Screen name={'Profile'} component={ProfileView} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </PaperProvider>
   );
 };
 

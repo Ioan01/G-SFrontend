@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Badge, Button, List, Surface, Title} from 'react-native-paper';
-import {PixelRatio, View} from 'react-native';
+import {PixelRatio, SafeAreaView, ScrollView, View} from 'react-native';
 import {AccountContext} from '../../Contexts/AccountContext';
 import {HttpStatus, sendJsonRequest} from '../../HttpHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
@@ -80,35 +80,22 @@ const LoggedInView = ({navigation}) => {
     getProfileData();
   }, []);
   return (
-    <View
+    <SafeAreaView
       style={{
-        marginHorizontal: 30,
-        marginTop: 100 / PixelRatio.get(),
-        alignItems: 'center',
+        marginTop: 50 / PixelRatio.get(),
       }}>
-      <Surface
-        style={{
-          marginBottom: 100 / PixelRatio.get(),
-          elevation: 40,
-          borderRadius: 100,
-          borderWidth: 2,
-        }}>
+      <ScrollView>
         <Avatar.Text
           label={profileName.slice(0, 2)}
           size={250 / PixelRatio.get()}
+          style={{alignSelf: 'center'}}
         />
-      </Surface>
-      <Surface
-        style={{
-          elevation: 10,
-          alignSelf: 'stretch',
-          borderRadius: 10,
-        }}>
-        <List.Section title={'Profile Details'}>
+
+        <List.Section title={'Profile details'}>
           <List.Item
             title={profileName}
             description={'This is your public profile name'}
-            left={props => <List.Icon icon={'tag'} />}
+            left={props => <List.Icon icon={'bitcoin'} />}
           />
           <List.Item
             title={money.toString()}
@@ -141,8 +128,8 @@ const LoggedInView = ({navigation}) => {
           title={'Delete account'}
           left={props => <List.Icon icon={'delete'} />}
         />
-      </Surface>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 

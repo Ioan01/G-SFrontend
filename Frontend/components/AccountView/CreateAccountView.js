@@ -20,6 +20,7 @@ import {
 } from 'react-native-paper';
 import {sendJsonRequest, HttpStatus} from '../../HttpHandler';
 import {Icon} from 'react-native-vector-icons/index';
+import SuccessfulAlertView from '../SuccessfulAlertView';
 
 const CreateAccountView = ({navigation}) => {
   const [passwordHidden, hidePassword] = useState(true);
@@ -64,33 +65,6 @@ const CreateAccountView = ({navigation}) => {
 
   return (
     <Provider>
-      <Portal>
-        <Modal visible={registered} onDismiss={() => navigation.goBack()}>
-          <View>
-            <Card>
-              <Card.Title title={'Account successfully registered'} />
-              <Card.Content>
-                <Avatar.Icon
-                  icon={'check'}
-                  style={{
-                    backgroundColor: 'green',
-                    alignSelf: 'center',
-                    marginVertical: 50,
-                    scaleX: 2,
-                    scaleY: 2,
-                  }}
-                />
-                <Paragraph>You can now go back to the login page</Paragraph>
-              </Card.Content>
-              <Card.Actions style={{justifyContent: 'flex-end'}}>
-                <Button mode={'contained'} onPress={() => navigation.goBack()}>
-                  Go back to login
-                </Button>
-              </Card.Actions>
-            </Card>
-          </View>
-        </Modal>
-      </Portal>
       <View style={{marginHorizontal: 30, marginTop: 30 / PixelRatio.get()}}>
         <Title
           style={{alignSelf: 'center', marginBottom: 100 / PixelRatio.get()}}>
@@ -105,7 +79,14 @@ const CreateAccountView = ({navigation}) => {
           }}
           placeholder={'Enter a new username'}
         />
-
+        <SuccessfulAlertView
+          onPress={() => navigation.goBack()}
+          title={'Account successfully created'}
+          navigation={navigation}
+          registered={registered}
+          paragraph={''}
+          buttonText={'Go back to login'}
+        />
         <TextInput
           mode={'outlined'}
           secureTextEntry={passwordHidden}

@@ -1,4 +1,7 @@
+import axios from 'axios';
+
 const serverAdresss = 'http://164.92.150.184:8080/';
+const localHostAdress = '';
 
 export async function sendJsonRequest(method, endpoint, body, token) {
   return fetch(serverAdresss + endpoint, {
@@ -9,6 +12,16 @@ export async function sendJsonRequest(method, endpoint, body, token) {
       Authorization: token,
     },
     body: method !== 'GET' ? JSON.stringify(body) : null,
+  });
+}
+
+export async function sendUrlEncodedRequest(method, endpoint, body, token) {
+  console.log(serverAdresss + endpoint + '?' + new URLSearchParams(body));
+  return fetch(serverAdresss + endpoint + '?' + new URLSearchParams(body), {
+    method: method,
+    headers: {
+      Authorization: token,
+    },
   });
 }
 
