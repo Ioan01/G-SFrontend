@@ -83,7 +83,7 @@ const CreateAccountView = ({navigation}) => {
           onPress={() => navigation.goBack()}
           title={'Account successfully created'}
           navigation={navigation}
-          registered={registered}
+          visible={registered}
           paragraph={''}
           buttonText={'Go back to login'}
         />

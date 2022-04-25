@@ -12,6 +12,7 @@ import {HttpStatus, sendJsonRequest} from '../../HttpHandler';
 import {AccountContext} from '../../Contexts/AccountContext';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {waitFor} from '@babel/core/lib/gensync-utils/async';
+import {getProfileData, login} from '../../Contexts/Login';
 
 const LogInView = ({route, navigation}) => {
   const [passwordHidden, hidePassword] = useState(true);
@@ -28,6 +29,9 @@ const LogInView = ({route, navigation}) => {
     setPassword,
     setUsername,
     setLoggedIn,
+    setProfileName,
+    setProfileRole,
+    setMoney,
   } = useContext(AccountContext);
 
   useEffect(() => {
@@ -37,38 +41,6 @@ const LogInView = ({route, navigation}) => {
       }
     }
   });
-
-  async function login() {
-    try {
-      setLoading(true);
-      const resp = await sendJsonRequest(
-        'POST',
-        'login',
-        {username: username, password: password},
-        '',
-      );
-      console.log(username + ' ' + password);
-      switch (resp.status) {
-        case HttpStatus.OK:
-          global.token = await resp.text();
-          console.log(global.token);
-          setLoggedIn(true);
-          await AsyncStorage.setItem('username', username);
-          await AsyncStorage.setItem('password', password);
-          break;
-        case HttpStatus.INTERNAL_SERVER_ERROR:
-          setHelperText('Internal server error');
-          break;
-        default:
-          setHelperText('No account found with the password specified');
-          break;
-      }
-    } catch (error) {
-      console.log(error);
-      setHelperText(error.toString());
-    }
-    setLoading(false);
-  }
 
   return (
     <View style={{marginHorizontal: 30, marginTop: 100 / PixelRatio.get()}}>
@@ -115,7 +87,15 @@ const LogInView = ({route, navigation}) => {
         mode={'outlined'}
         onPress={async () => {
           setHelperText('');
-          await login();
+          await login(
+            username,
+            password,
+            setLoggedIn,
+            setHelperText,
+            setLoading,
+          ).then(
+            getProfileData(setProfileName, setMoney, setProfileRole, null),
+          );
         }}>
         Log In
       </Button>

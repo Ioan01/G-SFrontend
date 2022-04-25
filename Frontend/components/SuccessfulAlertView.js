@@ -13,13 +13,13 @@ function SuccessfulAlertView({
   title,
   paragraph,
   buttonText,
-  registered,
+  visible,
   navigation,
   onPress,
 }) {
   return (
     <Portal>
-      <Modal visible={registered} onDismiss={() => navigation.goBack()}>
+      <Modal visible={visible} onDismiss={() => navigation.goBack()}>
         <View>
           <Card>
             <Card.Title title={title} titleStyle={{alignSelf: 'center'}} />

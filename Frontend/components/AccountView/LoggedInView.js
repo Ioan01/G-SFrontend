@@ -40,45 +40,9 @@ const LoggedInView = ({navigation}) => {
       setPassword('');
       setLoggedIn(false);
       setFoundAccount(false);
+      setProfileRole(null);
     } catch (e) {}
   }
-
-  async function getProfileData() {
-    try {
-      const response = await sendJsonRequest(
-        'GET',
-        'user/profile',
-        null,
-        global.token,
-      );
-
-      switch (response.status) {
-        case HttpStatus.OK:
-          const json = await response.json();
-          setProfileName(json.username);
-          setMoney(json.money);
-          setProfileRole(json.role);
-          console.log(JSON.stringify(json));
-          break;
-        default:
-          console.log('fail');
-          break;
-      }
-    } catch (e) {
-      console.log(e.toString());
-    }
-  }
-
-  function logOut() {}
-
-  useEffect(() => {
-    if (global.token == null) {
-      console.log('cannot find token');
-
-      // more to be added later
-    }
-    getProfileData();
-  }, []);
   return (
     <SafeAreaView
       style={{

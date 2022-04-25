@@ -1,9 +1,12 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   Appbar,
   Button,
   Divider,
   Menu,
+  Modal,
+  Paragraph,
+  Portal,
   Provider,
   Searchbar,
 } from 'react-native-paper';
@@ -13,44 +16,39 @@ import CreateAccountView from '../AccountView/CreateAccountView';
 import LoggedInView from '../AccountView/LoggedInView';
 import App from '../../App';
 import {PixelRatio, SafeAreaView, View} from 'react-native';
+import {AccountContext} from '../../Contexts/AccountContext';
 
-const StoreHeader = ({}) => {
+const StoreHeader = ({navigation}) => {
+  const {profileRole} = useContext(AccountContext);
   const [searching, setSearching] = useState(false);
-  const [menuVisible, setMenuVisible] = useState(false);
-
-  function add() {}
 
   function filter() {}
 
   return (
     <View>
-      <Appbar>
-        {!searching ? (
-          <>
-            <Menu
-              visible={menuVisible}
-              onDismiss={() => setMenuVisible(false)}
-              anchor={
-                <Appbar.Action
-                  icon={'sort'}
-                  onPress={() => setMenuVisible(true)}
-                />
-              }>
-              <Menu.Item title={'Price increasing'} />
-            </Menu>
-            <SafeAreaView>
-              <Searchbar />
-            </SafeAreaView>
-          </>
-        ) : (
-          <Appbar.Header>
+      {!searching ? (
+        <Appbar.Header>
+          <Appbar.Action icon={'magnify'} onPress={() => setSearching(true)} />
+          <Appbar.Content title={'Store'} />
+          {profileRole != null && profileRole !== '' ? (
             <Appbar.Action
-              icon={'arrow-left'}
-              onPress={() => setSearching(false)}
+              icon={'plus-circle'}
+              onPress={() => navigation.navigate('Add')}
             />
-          </Appbar.Header>
-        )}
-      </Appbar>
+          ) : (
+            <></>
+          )}
+        </Appbar.Header>
+      ) : (
+        <Appbar.Header>
+          <Appbar.Action
+            icon={'arrow-left'}
+            onPress={() => setSearching(false)}
+          />
+          <Searchbar style={{width: 800 / PixelRatio.get()}} />
+          <Appbar.Action icon={'filter'} onPress={() => {}} />
+        </Appbar.Header>
+      )}
     </View>
   );
 };
