@@ -5,7 +5,7 @@
 
 This project serves as the REST api consumer built for the SEF Project (https://github.com/Ioan01/LocalG-SApplication)
 
-
+The project is currently under construction. Most new features are scattered between different development branches. Currently, main only features stable and final functionalities.
 
 ## Features
 
