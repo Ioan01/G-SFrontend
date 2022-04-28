@@ -32,6 +32,7 @@ const LogInView = ({route, navigation}) => {
     setProfileName,
     setProfileRole,
     setMoney,
+    setProfilePhoto,
   } = useContext(AccountContext);
 
   useEffect(() => {
@@ -94,7 +95,13 @@ const LogInView = ({route, navigation}) => {
             setHelperText,
             setLoading,
           ).then(
-            getProfileData(setProfileName, setMoney, setProfileRole, null),
+            getProfileData(
+              setProfileName,
+              setMoney,
+              setProfileRole,
+              setProfilePhoto,
+              null,
+            ),
           );
         }}>
         Log In

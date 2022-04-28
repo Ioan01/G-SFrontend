@@ -36,35 +36,9 @@ const App = () => {
   const [profileRole, setProfileRole] = useState('');
   const [money, setMoney] = useState(0);
 
+  const [profilePhoto, setProfilePhoto] = useState('');
+
   const [loading, setLoading] = useState(false);
-
-  async function autoLogin(username, password) {
-    try {
-      const resp = await sendJsonRequest(
-        'POST',
-        'login',
-        {username: username, password: password},
-        '',
-      );
-      console.log(username + ' ' + password);
-      switch (resp.status) {
-        case HttpStatus.OK:
-          global.token = await resp.text();
-          console.log(global.token);
-          setLoggedIn(true);
-          await AsyncStorage.setItem('username', username);
-          await AsyncStorage.setItem('password', password);
-          break;
-        case HttpStatus.INTERNAL_SERVER_ERROR:
-          break;
-        default:
-          break;
-      }
-    } catch (error) {
-      console.log(error);
-    }
-  }
-
   useEffect(() => {
     try {
       AsyncStorage.multiGet(['username', 'password']).then(pair => {
@@ -74,7 +48,13 @@ const App = () => {
 
           login(pair[0][1], pair[1][1], setLoggedIn, () => {}, setLoading).then(
             () =>
-              getProfileData(setProfileName, setMoney, setProfileRole, null),
+              getProfileData(
+                setProfileName,
+                setMoney,
+                setProfileRole,
+                setProfilePhoto,
+                null,
+              ),
           );
         }
       });
@@ -100,6 +80,8 @@ const App = () => {
         setProfileRole: setProfileRole,
         money: money,
         setMoney: setMoney,
+        profilePhoto: profilePhoto,
+        setProfilePhoto: setProfilePhoto,
       }}>
       <PaperProvider>
         <NavigationContainer>

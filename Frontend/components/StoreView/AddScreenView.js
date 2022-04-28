@@ -95,6 +95,8 @@ const AddScreenView = ({route, navigation}) => {
 
     if (response.status === HttpStatus.OK) {
       setAddedProduct(true);
+    } else {
+      console.log(response);
     }
   }
 

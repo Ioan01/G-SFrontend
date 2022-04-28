@@ -2,7 +2,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Badge, Button, List, Surface, Title} from 'react-native-paper';
 import {PixelRatio, SafeAreaView, ScrollView, View} from 'react-native';
 import {AccountContext} from '../../Contexts/AccountContext';
-import {HttpStatus, sendJsonRequest} from '../../HttpHandler';
+import {HttpStatus, sendJsonRequest, server} from '../../HttpHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -18,6 +18,8 @@ const LoggedInView = ({navigation}) => {
     setUsername,
     setLoggedIn,
     setFoundAccount,
+    profilePhoto,
+    setProfilePhoto,
   } = useContext(AccountContext);
   const [loading, setLoading] = useState(false);
 
@@ -49,9 +51,9 @@ const LoggedInView = ({navigation}) => {
         marginTop: 50 / PixelRatio.get(),
       }}>
       <ScrollView>
-        <Avatar.Text
-          label={profileName.slice(0, 2)}
-          size={250 / PixelRatio.get()}
+        <Avatar.Image
+          source={{uri: server + 'image/?id=' + profilePhoto}}
+          size={400 / PixelRatio.get()}
           style={{alignSelf: 'center'}}
         />
 
@@ -77,11 +79,6 @@ const LoggedInView = ({navigation}) => {
           />
         </List.Section>
         <List.Subheader>Change account details</List.Subheader>
-        <List.Item
-          onPress={() => {}}
-          title={'Change username'}
-          left={props => <List.Icon icon={'pen'} />}
-        />
         <List.Item
           onPress={() => {}}
           title={'Change password'}

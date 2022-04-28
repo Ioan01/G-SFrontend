@@ -1,22 +1,25 @@
-import React, {useEffect, useState} from 'react';
+import React, {createContext, useEffect, useState} from 'react';
 import StoreHeader from './StoreHeader';
-import {FlatList, View} from 'react-native';
+import {FlatList, PixelRatio, View} from 'react-native';
 import {
   ActivityIndicator,
+  Button,
   Card,
   Chip,
   Divider,
   Provider,
 } from 'react-native-paper';
 import {sendUrlEncodedRequest, server} from '../../HttpHandler';
+import BottomBrowseView from './BottomBrowseView';
 
 const BrowseView = ({navigation}) => {
   const [page, setPage] = useState(0);
   const [items, setItems] = useState([]);
+  const [totalPages, setTotalPages] = useState(0);
 
   const [loading, setLoading] = useState(false);
 
-  const pageSize = 5;
+  const pageSize = 10;
 
   function addItems(items) {
     setItems(items.concat(items));
@@ -31,7 +34,29 @@ const BrowseView = ({navigation}) => {
       });
 
       let json = await response.json();
-      addItems(json.products);
+      console.log(json);
+
+      json.products.forEach(item => {
+        const now = Date.now();
+
+        const dateDelta = new Date(now - item.time);
+
+        const [days, months, years] = [
+          dateDelta.getUTCDate(),
+          dateDelta.getMonth(),
+          dateDelta.getFullYear() - 1970,
+        ];
+        if (years > 0) {
+          item.date = years + ' years ago';
+        } else if (months > 0) {
+          item.date = months + ' months ago';
+        } else {
+          days === 1 ? (item.date = 'Today') : (item.date = days + ' days ago');
+        }
+      });
+
+      setItems(json.products);
+      setTotalPages(json.totalPages);
       console.log(items);
     } catch (e) {
       console.log(e);
@@ -51,13 +76,8 @@ const BrowseView = ({navigation}) => {
 
       <FlatList
         refreshing={false}
+        ListFooterComponent={<BottomBrowseView />}
         onRefresh={async () => {
-          setItems([]);
-          setPage(0);
-          await fetchPage();
-        }}
-        onEndReached={async () => {
-          setPage(page + 1);
           await fetchPage();
         }}
         data={items}
@@ -84,7 +104,7 @@ const BrowseView = ({navigation}) => {
               <Divider />
               <View style={{flexDirection: 'row', justifyContent: 'center'}}>
                 <Chip icon={'currency-usd'}>{item.price}</Chip>
-                <Chip icon={'clock'}>Today</Chip>
+                <Chip icon={'clock'}>{item.date}</Chip>
                 <Chip icon={'map-marker'}>Galati</Chip>
               </View>
             </Card.Content>

@@ -45,6 +45,7 @@ export async function getProfileData(
   setProfileName,
   setMoney,
   setProfileRole,
+  setProfilePhoto,
   onFail,
 ) {
   try {
@@ -61,6 +62,7 @@ export async function getProfileData(
         setProfileName(json.username);
         setMoney(json.money);
         setProfileRole(json.role);
+        setProfilePhoto(json.imageID);
         console.log(JSON.stringify(json));
         break;
       default:
