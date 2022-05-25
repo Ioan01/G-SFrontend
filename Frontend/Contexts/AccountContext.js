@@ -19,4 +19,7 @@ export const AccountContext = createContext({
   setProfileRole: profileRole => {},
   money: 0,
   setMoney: money => {},
+
+  profilePhoto: '',
+  setProfilePhoto: profilePhoto => {},
 });

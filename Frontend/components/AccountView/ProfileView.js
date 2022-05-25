@@ -35,16 +35,13 @@ const style = require('../../styles');
 const ProfileView = () => {
   const accountViewStack = createStackNavigator();
 
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-
-  const [foundAccount, setFoundAccount] = useState(false);
-  const [loggedIn, setLoggedIn] = useState(false);
-  const [profileName, setProfileName] = useState('');
-  const [profileRole, setProfileRole] = useState('');
-  const [money, setMoney] = useState(0);
+  const {setPassword, setUsername, setFoundAccount, loggedIn} =
+    useContext(AccountContext);
 
   useEffect(() => {
+    if (loggedIn) {
+      return;
+    }
     try {
       AsyncStorage.multiGet(['username', 'password']).then(pair => {
         if (pair[0][1] != null && pair[1][1] != null) {
@@ -58,58 +55,26 @@ const ProfileView = () => {
   }, []);
 
   return (
-    <AccountContext.Provider
-      value={{
-        username: username,
-        setUsername: setUsername,
-
-        foundAccount: foundAccount,
-        setFoundAccount: setFoundAccount,
-
-        password: password,
-        setPassword: setPassword,
-        loggedIn: loggedIn,
-        setLoggedIn: setLoggedIn,
-        profileName: profileName,
-        setProfileName: setProfileName,
-        profileRole: profileRole,
-        setProfileRole: setProfileRole,
-        money: money,
-        setMoney: setMoney,
-      }}>
-      <AccountContext.Consumer>
-        {({loggedIn}) => {
-          return (
-            <NavigationContainer independent={true}>
-              <accountViewStack.Navigator
-                screenOptions={{
-                  headerShown: true,
-                }}>
-                {!loggedIn ? (
-                  <accountViewStack.Group>
-                    <accountViewStack.Screen
-                      name="Log In"
-                      component={LogInView}
-                    />
-                    <accountViewStack.Screen
-                      name="Create Account"
-                      component={CreateAccountView}
-                    />
-                  </accountViewStack.Group>
-                ) : (
-                  <accountViewStack.Group>
-                    <accountViewStack.Screen
-                      name="Account"
-                      component={LoggedInView}
-                    />
-                  </accountViewStack.Group>
-                )}
-              </accountViewStack.Navigator>
-            </NavigationContainer>
-          );
-        }}
-      </AccountContext.Consumer>
-    </AccountContext.Provider>
+    <NavigationContainer independent={true}>
+      <accountViewStack.Navigator
+        screenOptions={{
+          headerShown: true,
+        }}>
+        {!loggedIn ? (
+          <accountViewStack.Group>
+            <accountViewStack.Screen name="Log In" component={LogInView} />
+            <accountViewStack.Screen
+              name="Create Account"
+              component={CreateAccountView}
+            />
+          </accountViewStack.Group>
+        ) : (
+          <accountViewStack.Group>
+            <accountViewStack.Screen name="Account" component={LoggedInView} />
+          </accountViewStack.Group>
+        )}
+      </accountViewStack.Navigator>
+    </NavigationContainer>
   );
 };
 

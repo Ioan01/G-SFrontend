@@ -4,8 +4,8 @@ import {StyleSheet} from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome5';
 
 module.exports = StyleSheet.create({
-  TabColor: '#0F7173',
-  TabHighlightColor: '#272932',
+  TabColor: '#FF7173',
+  TabHighlightColor: '#F72932',
 
   TabBarIcon: ({route, focused, color}) => {
     let icon = 'user';

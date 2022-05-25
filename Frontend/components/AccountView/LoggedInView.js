@@ -1,8 +1,8 @@
 import React, {useContext, useEffect, useState} from 'react';
 import {Avatar, Badge, Button, List, Surface, Title} from 'react-native-paper';
-import {PixelRatio, View} from 'react-native';
+import {PixelRatio, SafeAreaView, ScrollView, View} from 'react-native';
 import {AccountContext} from '../../Contexts/AccountContext';
-import {HttpStatus, sendJsonRequest} from '../../HttpHandler';
+import {HttpStatus, sendJsonRequest, server} from '../../HttpHandler';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import FontAwesome5 from 'react-native-vector-icons/FontAwesome5';
 
@@ -18,6 +18,8 @@ const LoggedInView = ({navigation}) => {
     setUsername,
     setLoggedIn,
     setFoundAccount,
+    profilePhoto,
+    setProfilePhoto,
   } = useContext(AccountContext);
   const [loading, setLoading] = useState(false);
 
@@ -40,75 +42,26 @@ const LoggedInView = ({navigation}) => {
       setPassword('');
       setLoggedIn(false);
       setFoundAccount(false);
+      setProfileRole(null);
     } catch (e) {}
   }
-
-  async function getProfileData() {
-    try {
-      const response = await sendJsonRequest(
-        'GET',
-        'user/profile',
-        null,
-        global.token,
-      );
-
-      switch (response.status) {
-        case HttpStatus.OK:
-          const json = await response.json();
-          setProfileName(json.username);
-          setMoney(json.money);
-          setProfileRole(json.role);
-          console.log(JSON.stringify(json));
-          break;
-        default:
-          console.log('fail');
-          break;
-      }
-    } catch (e) {
-      console.log(e.toString());
-    }
-  }
-
-  function logOut() {}
-
-  useEffect(() => {
-    if (global.token == null) {
-      console.log('cannot find token');
-
-      // more to be added later
-    }
-    getProfileData();
-  }, []);
   return (
-    <View
+    <SafeAreaView
       style={{
-        marginHorizontal: 30,
-        marginTop: 100 / PixelRatio.get(),
-        alignItems: 'center',
+        marginTop: 50 / PixelRatio.get(),
       }}>
-      <Surface
-        style={{
-          marginBottom: 100 / PixelRatio.get(),
-          elevation: 40,
-          borderRadius: 100,
-          borderWidth: 2,
-        }}>
-        <Avatar.Text
-          label={profileName.slice(0, 2)}
-          size={250 / PixelRatio.get()}
+      <ScrollView on>
+        <Avatar.Image
+          source={{uri: server + 'image/?id=' + profilePhoto}}
+          size={400 / PixelRatio.get()}
+          style={{alignSelf: 'center'}}
         />
-      </Surface>
-      <Surface
-        style={{
-          elevation: 10,
-          alignSelf: 'stretch',
-          borderRadius: 10,
-        }}>
-        <List.Section title={'Profile Details'}>
+
+        <List.Section title={'Profile details'}>
           <List.Item
             title={profileName}
             description={'This is your public profile name'}
-            left={props => <List.Icon icon={'tag'} />}
+            left={props => <List.Icon icon={'bitcoin'} />}
           />
           <List.Item
             title={money.toString()}
@@ -128,11 +81,6 @@ const LoggedInView = ({navigation}) => {
         <List.Subheader>Change account details</List.Subheader>
         <List.Item
           onPress={() => {}}
-          title={'Change username'}
-          left={props => <List.Icon icon={'pen'} />}
-        />
-        <List.Item
-          onPress={() => {}}
           title={'Change password'}
           left={props => <List.Icon icon={'lock'} />}
         />
@@ -141,8 +89,8 @@ const LoggedInView = ({navigation}) => {
           title={'Delete account'}
           left={props => <List.Icon icon={'delete'} />}
         />
-      </Surface>
-    </View>
+      </ScrollView>
+    </SafeAreaView>
   );
 };
 
