@@ -23,16 +23,12 @@ const BrowseView = ({navigation}) => {
 
   const pageSize = 10;
 
-  function addItems(items) {
-    setItems(items.concat(items));
-  }
-
   async function fetchPage() {
     setLoading(true);
     try {
       const response = await sendUrlEncodedRequest('GET', 'products/get-page', {
         page: page,
-        pageSize: pageSize,
+        size: pageSize,
       });
 
       let json = await response.json();
@@ -74,7 +70,14 @@ const BrowseView = ({navigation}) => {
 
   return (
     <Provider>
-      <StoreHeader navigation={navigation} />
+      <StoreHeader
+        navigation={navigation}
+        setPage={setPage}
+        setTotalPages={setTotalPages}
+        setItems={setItems}
+        setLoading={setLoading}
+        pageSize={pageSize}
+      />
 
       <FlatList
         refreshing={false}
