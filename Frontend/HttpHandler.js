@@ -1,9 +1,9 @@
 import axios from 'axios';
 
-const serverAdresss = 'http://164.92.150.184:8080/';
+const serverAdresss = 'http://164.92.150.184:8081/';
 const localHostAdress = '';
 
-export const server = 'http://164.92.150.184:8080/';
+export const server = 'http://164.92.150.184:8081/';
 
 export async function sendJsonRequest(method, endpoint, body, token) {
   return fetch(serverAdresss + endpoint, {

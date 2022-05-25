@@ -26,6 +26,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createStackNavigator} from '@react-navigation/stack';
 import BrowseStoreView from './BrowseView';
 import AddScreenView from './AddScreenView';
+import ProductView from './ProductView';
 
 const StoreView = ({role}) => {
   const storeViewStack = createStackNavigator();
@@ -41,6 +42,7 @@ const StoreView = ({role}) => {
         }}>
         <storeViewStack.Screen name={'Browse'} component={BrowseStoreView} />
         <storeViewStack.Screen name={'Add'} component={AddScreenView} />
+        <storeViewStack.Screen name={'Product'} component={ProductView} />
       </storeViewStack.Navigator>
     </NavigationContainer>
   );

@@ -17,6 +17,8 @@ const BrowseView = ({navigation}) => {
   const [items, setItems] = useState([]);
   const [totalPages, setTotalPages] = useState(0);
 
+  const [currentItem, setCurrentItem] = useState({});
+
   const [loading, setLoading] = useState(false);
 
   const pageSize = 10;
@@ -66,9 +68,9 @@ const BrowseView = ({navigation}) => {
 
   useEffect(() => {
     try {
-      fetchPage(0);
+      fetchPage(page);
     } catch (e) {}
-  }, []);
+  }, [page]);
 
   return (
     <Provider>
@@ -76,7 +78,13 @@ const BrowseView = ({navigation}) => {
 
       <FlatList
         refreshing={false}
-        ListFooterComponent={<BottomBrowseView />}
+        ListFooterComponent={
+          <BottomBrowseView
+            setPage={setPage}
+            currentPage={page}
+            maxPages={totalPages}
+          />
+        }
         onRefresh={async () => {
           await fetchPage();
         }}
@@ -84,7 +92,10 @@ const BrowseView = ({navigation}) => {
         renderItem={({item}) => (
           <Card
             mode={'outlined'}
-            style={{marginVertical: 5, marginHorizontal: 20}}>
+            style={{marginVertical: 5, marginHorizontal: 20}}
+            onPress={() => {
+              navigation.navigate('Product', {item: item});
+            }}>
             <Card.Title
               title={item.name}
               titleStyle={{alignSelf: 'center', fontSize: 30}}

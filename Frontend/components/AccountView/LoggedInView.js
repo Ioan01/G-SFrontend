@@ -50,7 +50,7 @@ const LoggedInView = ({navigation}) => {
       style={{
         marginTop: 50 / PixelRatio.get(),
       }}>
-      <ScrollView>
+      <ScrollView on>
         <Avatar.Image
           source={{uri: server + 'image/?id=' + profilePhoto}}
           size={400 / PixelRatio.get()}

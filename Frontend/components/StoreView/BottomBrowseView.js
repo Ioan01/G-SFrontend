@@ -2,10 +2,20 @@ import React from 'react';
 import {View} from 'react-native';
 import {Button} from 'react-native-paper';
 
-const BottomBrowseView = {currentPage,maxPages} => {
+const BottomBrowseView = ({currentPage, maxPages, setPage}) => {
   return (
-    <View>
-      <Button>aa</Button>
+    <View
+      style={{flexDirection: 'row', alignItems: 'center', alignSelf: 'center'}}>
+      <Button
+        icon={'arrow-left-box'}
+        disabled={currentPage === 0}
+        onPress={() => setPage(currentPage - 1)}
+      />
+      <Button
+        icon={'arrow-right-box'}
+        disabled={currentPage === maxPages - 1}
+        onPress={() => setPage(currentPage + 1)}
+      />
     </View>
   );
 };

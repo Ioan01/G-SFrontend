@@ -231,7 +231,7 @@ const AddScreenView = ({route, navigation}) => {
         </>
       ) : (
         // user role == 'client'
-        <Button>aa</Button>
+        <Button>Client add request not implemented</Button>
       )}
     </ScrollView>
   );
